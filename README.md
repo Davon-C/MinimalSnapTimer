@@ -1,5 +1,7 @@
 # MinimalSnapTimer
 
+[简体中文](README.zh-CN.md) | English
+
 MinimalSnapTimer is a lightweight Windows desktop timer built with C#, .NET 8, and WPF.  
 It is designed for offline countdown use, sit/stand workflow reminders, and a minimal pure-time display mode.
 
