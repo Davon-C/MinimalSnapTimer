@@ -1,0 +1,34 @@
+<Window x:Class="MinimalSnapTimer.Views.ReminderWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:services="clr-namespace:MinimalSnapTimer.Services"
+        Title="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[reminder.title]}"
+        Width="420"
+        Height="220"
+        WindowStartupLocation="CenterScreen"
+        ResizeMode="NoResize"
+        Topmost="True">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="TitleBlock"
+                   FontSize="18"
+                   FontWeight="SemiBold" />
+
+        <TextBlock x:Name="MessageBlock"
+                   Grid.Row="1"
+                   Margin="0,12,0,12"
+                   TextWrapping="Wrap" />
+
+        <UniformGrid Grid.Row="2" Columns="2">
+            <Button Margin="4" Padding="10,6" Click="Suggested_Click" Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[reminder.startNext]}" />
+            <Button Margin="4" Padding="10,6" Click="Repeat_Click" Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[reminder.repeatCurrent]}" />
+            <Button Margin="4" Padding="10,6" Click="Snooze_Click" Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[reminder.snooze]}" />
+            <Button Margin="4" Padding="10,6" Click="Stop_Click" Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.stop]}" />
+        </UniformGrid>
+    </Grid>
+</Window>

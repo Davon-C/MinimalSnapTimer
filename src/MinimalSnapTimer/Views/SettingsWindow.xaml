@@ -1,0 +1,495 @@
+<Window x:Class="MinimalSnapTimer.Views.SettingsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:services="clr-namespace:MinimalSnapTimer.Services"
+        Title="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.title]}"
+        Width="860"
+        Height="640"
+        MinWidth="760"
+        MinHeight="560"
+        UseLayoutRounding="True"
+        SnapsToDevicePixels="True">
+    <DockPanel Margin="16">
+        <Grid DockPanel.Dock="Bottom" Margin="0,14,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Orientation="Horizontal"
+                        VerticalAlignment="Center">
+                <Button Margin="0,0,8,0"
+                        Command="{Binding OpenLogDirectoryCommand}"
+                        ToolTip="{Binding LogDirectoryPath}"
+                        Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.openLogs]}" />
+                <Button Margin="0,0,8,0"
+                        Command="{Binding OpenConfigDirectoryCommand}"
+                        ToolTip="{Binding ConfigDirectoryPath}"
+                        Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.openConfig]}" />
+                <Button Command="{Binding ResetWindowPositionsCommand}"
+                        Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.resetWindows]}" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1"
+                        Margin="20,0"
+                        VerticalAlignment="Center">
+                <TextBlock HorizontalAlignment="Center"
+                           Style="{StaticResource SecondaryTextBlockStyle}"
+                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.version]}" />
+                <TextBlock HorizontalAlignment="Center"
+                           FontWeight="SemiBold"
+                           Text="{Binding VersionText}" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="2"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Right">
+                <Button Width="96"
+                        Margin="0,0,8,0"
+                        Command="{Binding SaveCommand}"
+                        Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.save]}" />
+                <Button Width="96"
+                        Style="{StaticResource FlatSecondaryButtonStyle}"
+                        Command="{Binding CancelCommand}"
+                        Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.cancel]}" />
+            </StackPanel>
+        </Grid>
+
+        <TabControl>
+            <TabItem Header="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.general]}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="14">
+                        <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}"
+                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.general]}" />
+                        <TextBlock Style="{StaticResource SectionDescriptionTextBlockStyle}"
+                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.general.desc]}" />
+
+                        <Border Margin="0,14,0,0" Style="{StaticResource CardBorderStyle}">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.language]}" />
+                                <TextBlock Style="{StaticResource SectionDescriptionTextBlockStyle}"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.general.desc]}" />
+                                <ComboBox Margin="0,12,0,0"
+                                          ItemsSource="{Binding LanguageOptions}"
+                                          DisplayMemberPath="Value"
+                                          SelectedValuePath="Key"
+                                          SelectedValue="{Binding Settings.General.Language}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                            <StackPanel>
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.autostartWindows]}"
+                                          IsChecked="{Binding Settings.General.AutoStartWithWindows}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.autoStartTimer]}"
+                                          IsChecked="{Binding Settings.General.AutoStartOnLaunch}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.launchPure]}"
+                                          IsChecked="{Binding Settings.General.LaunchInPureMode}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.minimizeTray]}"
+                                          IsChecked="{Binding Settings.General.StartMinimizedToTray}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.singleInstance]}"
+                                          IsChecked="{Binding Settings.General.SingleInstance}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.localLogs]}"
+                                          IsChecked="{Binding Settings.General.EnableLocalLogs}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.timing]}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="14">
+                        <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}"
+                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.timing]}" />
+                        <TextBlock Style="{StaticResource SectionDescriptionTextBlockStyle}"
+                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.timing.desc]}" />
+
+                        <Border Margin="0,14,0,0" Style="{StaticResource CardBorderStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.defaultMinutes]}" />
+                                <TextBox Grid.Row="0"
+                                         Grid.Column="1"
+                                         Margin="0,0,0,10"
+                                         Text="{Binding Settings.Timing.DefaultMinutes}" />
+
+                                <TextBlock Grid.Row="1"
+                                           Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.sitMinutes]}" />
+                                <TextBox Grid.Row="1"
+                                         Grid.Column="1"
+                                         Margin="0,0,0,10"
+                                         Text="{Binding Settings.Timing.SitMinutes}" />
+
+                                <TextBlock Grid.Row="2"
+                                           Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.standMinutes]}" />
+                                <TextBox Grid.Row="2"
+                                         Grid.Column="1"
+                                         Text="{Binding Settings.Timing.StandMinutes}" />
+                            </Grid>
+                        </Border>
+
+                        <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                            <StackPanel>
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.showSeconds]}"
+                                          IsChecked="{Binding Settings.Timing.ShowSeconds}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.autoRestart]}"
+                                          IsChecked="{Binding Settings.Timing.AutoRestart}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.autoCycle]}"
+                                          IsChecked="{Binding Settings.Timing.AutoCycleWorkflow}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.waitUser]}"
+                                          IsChecked="{Binding Settings.Timing.WaitForUserBeforeNextStage}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.appearance]}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="14">
+                        <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}"
+                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.appearance]}" />
+                        <TextBlock Style="{StaticResource SectionDescriptionTextBlockStyle}"
+                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.appearance.desc]}" />
+
+                        <Border Margin="0,14,0,0" Style="{StaticResource CardBorderStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.theme]}" />
+                                <ComboBox Grid.Row="0"
+                                          Grid.Column="1"
+                                          Margin="0,0,0,10"
+                                          ItemsSource="{Binding ThemeOptions}"
+                                          DisplayMemberPath="Value"
+                                          SelectedValuePath="Key"
+                                          SelectedValue="{Binding Settings.Appearance.Theme}" />
+
+                                <TextBlock Grid.Row="1"
+                                           Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.windowOpacity]}" />
+                                <TextBox Grid.Row="1"
+                                         Grid.Column="1"
+                                         Text="{Binding Settings.Appearance.WindowOpacity}" />
+                            </Grid>
+                        </Border>
+
+                        <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                            <StackPanel>
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.alwaysOnTop]}"
+                                          IsChecked="{Binding Settings.Appearance.AlwaysOnTop}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.hideTaskbar]}"
+                                          IsChecked="{Binding Settings.Appearance.HideTaskbarButton}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.enablePureMode]}"
+                                          IsChecked="{Binding Settings.Appearance.EnablePureMode}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.showBorder]}"
+                                          IsChecked="{Binding Settings.Appearance.ShowBorder}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.pureWindow]}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="14">
+                        <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}"
+                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.pureWindow]}" />
+                        <TextBlock Style="{StaticResource SectionDescriptionTextBlockStyle}"
+                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.pureWindow.desc]}" />
+
+                        <Border Margin="0,14,0,0" Style="{StaticResource CardBorderStyle}">
+                            <StackPanel>
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.lockPurePosition]}"
+                                          IsChecked="{Binding Settings.Appearance.LockPureWindowPosition}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.enableClickThrough]}"
+                                          IsChecked="{Binding Settings.Appearance.PureClickThrough}" />
+                                <TextBlock Style="{StaticResource SectionDescriptionTextBlockStyle}"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.clickThroughNote]}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.pureBackgroundOpacity]}" />
+                                <TextBox Grid.Row="0"
+                                         Grid.Column="1"
+                                         Margin="0,0,0,10"
+                                         Text="{Binding Settings.Appearance.PureBackgroundOpacity}" />
+
+                                <TextBlock Grid.Row="1"
+                                           Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.pureFontColor]}" />
+                                <TextBox Grid.Row="1"
+                                         Grid.Column="1"
+                                         Margin="0,0,0,10"
+                                         Text="{Binding Settings.Appearance.PureFontColor}" />
+
+                                <TextBlock Grid.Row="2"
+                                           Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.pureBackgroundColor]}" />
+                                <TextBox Grid.Row="2"
+                                         Grid.Column="1"
+                                         Text="{Binding Settings.Appearance.PureBackgroundColor}" />
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.reminder]}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="14">
+                        <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}"
+                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.reminder]}" />
+                        <TextBlock Style="{StaticResource SectionDescriptionTextBlockStyle}"
+                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.reminder.desc]}" />
+
+                        <Border Margin="0,14,0,0" Style="{StaticResource CardBorderStyle}">
+                            <StackPanel>
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.showPopup]}"
+                                          IsChecked="{Binding Settings.Reminder.ShowPopup}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.enableToast]}"
+                                          IsChecked="{Binding Settings.Reminder.UseToastNotifications}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.enableTrayBalloon]}"
+                                          IsChecked="{Binding Settings.Reminder.UseTrayBalloon}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.playSound]}"
+                                          IsChecked="{Binding Settings.Reminder.PlaySound}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.loopSound]}"
+                                          IsChecked="{Binding Settings.Reminder.LoopSound}" />
+                                <CheckBox Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.tickingSound]}"
+                                          IsChecked="{Binding Settings.Reminder.EnableTickingSound}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="250" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+
+                                <TextBlock Grid.Row="0"
+                                           Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.customSound]}" />
+                                <TextBox Grid.Row="0"
+                                         Grid.Column="1"
+                                         Margin="0,0,0,10"
+                                         Text="{Binding Settings.Reminder.CustomSoundFile}" />
+
+                                <TextBlock Grid.Row="1"
+                                           Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.externalCommand]}" />
+                                <TextBox Grid.Row="1"
+                                         Grid.Column="1"
+                                         Margin="0,0,0,10"
+                                         Text="{Binding Settings.Reminder.ExternalCommand}" />
+
+                                <TextBlock Grid.Row="2"
+                                           Grid.Column="0"
+                                           VerticalAlignment="Center"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.snoozeMinutes]}" />
+                                <TextBox Grid.Row="2"
+                                         Grid.Column="1"
+                                         Text="{Binding Settings.Reminder.SnoozeMinutes}" />
+                            </Grid>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.advanced]}">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="14">
+                        <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}"
+                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.advanced]}" />
+                        <TextBlock Style="{StaticResource SectionDescriptionTextBlockStyle}"
+                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.advanced.desc]}" />
+
+                        <Border Margin="0,14,0,0" Style="{StaticResource CardBorderStyle}">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.version]}" />
+                                <Grid Margin="0,12,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               VerticalAlignment="Center"
+                                               Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.version]}" />
+                                    <TextBox Grid.Column="1"
+                                             IsReadOnly="True"
+                                             Text="{Binding VersionText, Mode=OneWay}" />
+                                </Grid>
+                                <Grid Margin="0,10,0,0">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="200" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0"
+                                               VerticalAlignment="Center"
+                                               Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.settingsVersion]}" />
+                                    <TextBox Grid.Column="1"
+                                             IsReadOnly="True"
+                                             Text="{Binding SettingsVersion, Mode=OneWay}" />
+                                </Grid>
+                                <TextBlock Margin="0,10,0,0"
+                                           Style="{StaticResource SectionDescriptionTextBlockStyle}"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.migrationNote]}" />
+                            </StackPanel>
+                        </Border>
+
+                        <Border Margin="0,12,0,0" Style="{StaticResource CardBorderStyle}">
+                            <StackPanel>
+                                <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.paths]}" />
+
+                                <TextBlock Margin="0,12,0,4"
+                                           Foreground="{DynamicResource MutedForegroundBrush}"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.currentLogPath]}" />
+                                <TextBox IsReadOnly="True"
+                                         Text="{Binding LogDirectoryPath, Mode=OneWay}" />
+
+                                <TextBlock Margin="0,10,0,4"
+                                           Foreground="{DynamicResource MutedForegroundBrush}"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.currentConfigPath]}" />
+                                <TextBox IsReadOnly="True"
+                                         Text="{Binding ConfigDirectoryPath, Mode=OneWay}" />
+
+                                <TextBlock Margin="0,10,0,4"
+                                           Foreground="{DynamicResource MutedForegroundBrush}"
+                                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.currentExePath]}" />
+                                <TextBox IsReadOnly="True"
+                                         Text="{Binding ExecutablePath, Mode=OneWay}" />
+                            </StackPanel>
+                        </Border>
+                    </StackPanel>
+                </ScrollViewer>
+            </TabItem>
+
+            <TabItem Header="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.presets]}">
+                <DockPanel Margin="14">
+                    <StackPanel DockPanel.Dock="Top">
+                        <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}"
+                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.presets]}" />
+                        <TextBlock Style="{StaticResource SectionDescriptionTextBlockStyle}"
+                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.presets.desc]}" />
+                    </StackPanel>
+
+                    <StackPanel DockPanel.Dock="Bottom"
+                                Margin="0,12,0,0"
+                                Orientation="Horizontal">
+                        <Button Width="74"
+                                Margin="0,0,8,0"
+                                Click="AddPreset_Click"
+                                Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.addPreset]}" />
+                        <Button Width="74"
+                                Margin="0,0,8,0"
+                                Click="DuplicatePreset_Click"
+                                Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.copyPreset]}" />
+                        <Button Width="74"
+                                Margin="0,0,8,0"
+                                Click="DeletePreset_Click"
+                                Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.deletePreset]}" />
+                        <Button Width="74"
+                                Margin="0,0,8,0"
+                                Click="MoveUpPreset_Click"
+                                Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.moveUpPreset]}" />
+                        <Button Width="74"
+                                Click="MoveDownPreset_Click"
+                                Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.moveDownPreset]}" />
+                    </StackPanel>
+
+                    <DataGrid x:Name="PresetGrid"
+                              Margin="0,14,0,0"
+                              AutoGenerateColumns="False"
+                              CanUserAddRows="True"
+                              ItemsSource="{Binding Settings.Presets}">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Width="*"
+                                                Binding="{Binding Name}">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.presetName]}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Width="120"
+                                                Binding="{Binding DurationMinutes}">
+                                <DataGridTextColumn.Header>
+                                    <TextBlock Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.presetMinutes]}" />
+                                </DataGridTextColumn.Header>
+                            </DataGridTextColumn>
+                            <DataGridComboBoxColumn Width="150"
+                                                    ItemsSource="{Binding DataContext.PresetTypeOptions, RelativeSource={RelativeSource AncestorType=Window}}"
+                                                    DisplayMemberPath="Value"
+                                                    SelectedValuePath="Key"
+                                                    SelectedValueBinding="{Binding Type}">
+                                <DataGridComboBoxColumn.Header>
+                                    <TextBlock Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.presetType]}" />
+                                </DataGridComboBoxColumn.Header>
+                            </DataGridComboBoxColumn>
+                            <DataGridCheckBoxColumn Width="110"
+                                                    Binding="{Binding AutoStart}">
+                                <DataGridCheckBoxColumn.Header>
+                                    <TextBlock Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[settings.presetAutoStart]}" />
+                                </DataGridCheckBoxColumn.Header>
+                            </DataGridCheckBoxColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </DockPanel>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

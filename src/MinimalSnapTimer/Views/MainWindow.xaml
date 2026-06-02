@@ -1,0 +1,245 @@
+<Window x:Class="MinimalSnapTimer.Views.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:services="clr-namespace:MinimalSnapTimer.Services"
+        Title="{Binding WindowTitle}"
+        Width="540"
+        Height="600"
+        MinWidth="500"
+        MinHeight="560"
+        ResizeMode="CanResize"
+        Topmost="{Binding IsAlwaysOnTop}"
+        Opacity="{Binding WindowOpacityValue}"
+        Background="{DynamicResource AppWindowBackgroundBrush}"
+        KeyDown="Window_KeyDown"
+        LocationChanged="Window_LocationChanged"
+        SizeChanged="Window_SizeChanged"
+        Loaded="Window_Loaded">
+    <Grid Margin="18">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel>
+                <TextBlock FontSize="22"
+                           FontWeight="SemiBold"
+                           Text="MinimalSnapTimer" />
+                <TextBlock Style="{StaticResource SectionDescriptionTextBlockStyle}"
+                           Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.surface.title]}" />
+            </StackPanel>
+
+            <StackPanel Grid.Column="1"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Top">
+                <Button Margin="0,0,8,0"
+                        Padding="12,6"
+                        Style="{StaticResource FlatSecondaryButtonStyle}"
+                        Command="{Binding TogglePureModeCommand}"
+                        Content="{Binding ModeToggleText}" />
+                <Button Padding="12,6"
+                        Style="{StaticResource FlatSecondaryButtonStyle}"
+                        Command="{Binding OpenSettingsCommand}"
+                        Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.settings]}" />
+            </StackPanel>
+        </Grid>
+
+        <WrapPanel Grid.Row="1" Margin="0,16,0,0">
+            <Border Style="{StaticResource BadgeBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource BadgeTextBlockStyle}"
+                               Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.surface.status]}" />
+                    <TextBlock Margin="6,0,0,0"
+                               Style="{StaticResource BadgeTextBlockStyle}"
+                               Text="{Binding StatusText}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource BadgeBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource BadgeTextBlockStyle}"
+                               Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.surface.task]}" />
+                    <TextBlock Margin="6,0,0,0"
+                               Style="{StaticResource BadgeTextBlockStyle}"
+                               Text="{Binding CurrentTaskText}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource BadgeBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource BadgeTextBlockStyle}"
+                               Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.surface.mode]}" />
+                    <TextBlock Margin="6,0,0,0"
+                               Style="{StaticResource BadgeTextBlockStyle}"
+                               Text="{Binding DisplayModeText}" />
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource BadgeBorderStyle}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource BadgeTextBlockStyle}"
+                               Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.surface.alerts]}" />
+                    <TextBlock Margin="6,0,0,0"
+                               Style="{StaticResource BadgeTextBlockStyle}"
+                               Text="{Binding AlertStatusText}" />
+                </StackPanel>
+            </Border>
+        </WrapPanel>
+
+        <Border Grid.Row="2"
+                Margin="0,12,0,0"
+                Style="{StaticResource CardBorderStyle}">
+            <StackPanel>
+                <TextBlock HorizontalAlignment="Center"
+                           Style="{StaticResource SecondaryTextBlockStyle}"
+                           Text="{Binding CurrentTaskText}" />
+                <TextBlock Margin="0,8,0,4"
+                           Style="{StaticResource HeroTimeTextBlockStyle}"
+                           Text="{Binding DisplayTime}" />
+                <TextBlock HorizontalAlignment="Center"
+                           Style="{StaticResource SectionDescriptionTextBlockStyle}"
+                           Text="{Binding StatusText}" />
+
+                <UniformGrid Margin="0,18,0,0"
+                             Rows="1"
+                             Columns="4">
+                    <Button Margin="4,0"
+                            Padding="10,10"
+                            Command="{Binding StartCommand}"
+                            Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.start]}" />
+                    <Button Margin="4,0"
+                            Padding="10,10"
+                            Style="{StaticResource FlatSecondaryButtonStyle}"
+                            Command="{Binding PauseResumeCommand}"
+                            Content="{Binding PauseResumeText}" />
+                    <Button Margin="4,0"
+                            Padding="10,10"
+                            Style="{StaticResource FlatSecondaryButtonStyle}"
+                            Command="{Binding StopCommand}"
+                            Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.stop]}" />
+                    <Button Margin="4,0"
+                            Padding="10,10"
+                            Style="{StaticResource FlatSecondaryButtonStyle}"
+                            Command="{Binding ResetCommand}"
+                            Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.reset]}" />
+                </UniformGrid>
+            </StackPanel>
+        </Border>
+
+        <Grid Grid.Row="3" Margin="0,12,0,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.2*" />
+                <ColumnDefinition Width="0.8*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="0,0,12,0"
+                    Style="{StaticResource CardBorderStyle}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}"
+                               Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.surface.quick]}" />
+                    <TextBlock Style="{StaticResource SectionDescriptionTextBlockStyle}"
+                               Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.surface.secondaryHint]}" />
+
+                    <UniformGrid Margin="0,14,0,0"
+                                 Rows="2"
+                                 Columns="2">
+                        <Button Margin="4"
+                                Padding="10,10"
+                                Command="{Binding StartSitCommand}"
+                                Content="{Binding SitQuickButtonText}" />
+                        <Button Margin="4"
+                                Padding="10,10"
+                                Command="{Binding StartStandCommand}"
+                                Content="{Binding StandQuickButtonText}" />
+                        <Button Margin="4"
+                                Padding="10,10"
+                                Style="{StaticResource FlatSecondaryButtonStyle}"
+                                Command="{Binding ToggleAlwaysOnTopCommand}"
+                                Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.topmost]}" />
+                        <Button Margin="4"
+                                Padding="10,10"
+                                Style="{StaticResource FlatSecondaryButtonStyle}"
+                                Command="{Binding HideToTrayCommand}"
+                                Content="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[tray.toggleWindow]}" />
+                    </UniformGrid>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="0"
+                    Grid.Column="1"
+                    Style="{StaticResource CardBorderStyle}">
+                <StackPanel>
+                    <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}"
+                               Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.surface.inputCard]}" />
+                    <TextBlock Style="{StaticResource SectionDescriptionTextBlockStyle}"
+                               Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.surface.inputCardHint]}" />
+                    <TextBox Margin="0,14,0,0"
+                             Height="34"
+                             VerticalContentAlignment="Center"
+                             Text="{Binding InputDuration, UpdateSourceTrigger=PropertyChanged}" />
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Row="1"
+                    Grid.ColumnSpan="2"
+                    Margin="0,12,0,0"
+                    Style="{StaticResource CardBorderStyle}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Style="{StaticResource SectionHeaderTextBlockStyle}"
+                               Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.surface.presets]}" />
+                    <ListBox Grid.Row="1"
+                             Margin="0,14,0,0"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             ItemsSource="{Binding Presets}"
+                             MouseDoubleClick="PresetsList_MouseDoubleClick">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <Border Margin="0,0,0,8"
+                                        Padding="12,10"
+                                        Background="{DynamicResource AlternateBackgroundBrush}"
+                                        BorderBrush="{DynamicResource BorderBrush}"
+                                        BorderThickness="1"
+                                        CornerRadius="10">
+                                    <DockPanel LastChildFill="False">
+                                        <TextBlock FontWeight="SemiBold"
+                                                   Text="{Binding Name}" />
+                                        <TextBlock Margin="8,0,0,0"
+                                                   Foreground="{DynamicResource MutedForegroundBrush}"
+                                                   Text="{Binding DurationMinutes}" />
+                                        <TextBlock Margin="4,0,0,0"
+                                                   Foreground="{DynamicResource MutedForegroundBrush}"
+                                                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.minutes]}" />
+                                    </DockPanel>
+                                </Border>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <TextBlock Grid.Row="4"
+                   Margin="0,12,0,0"
+                   HorizontalAlignment="Center"
+                   Style="{StaticResource SecondaryTextBlockStyle}"
+                   Text="{Binding Source={x:Static services:LocalizationService.Instance}, Path=[main.inputHint]}" />
+    </Grid>
+</Window>

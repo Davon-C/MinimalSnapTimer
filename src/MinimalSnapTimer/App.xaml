@@ -1,0 +1,12 @@
+<Application x:Class="MinimalSnapTimer.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/MinimalSnapTimer;component/Themes/BaseTheme.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/MinimalSnapTimer;component/Themes/LightTheme.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>

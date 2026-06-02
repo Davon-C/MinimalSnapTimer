@@ -1,0 +1,27 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalSnapTimer", "src\MinimalSnapTimer\MinimalSnapTimer.csproj", "{AA0A4E38-5ECF-4D95-85D4-2336A4B507E7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MinimalSnapTimer.Tests", "tests\MinimalSnapTimer.Tests\MinimalSnapTimer.Tests.csproj", "{21FB56D4-68E2-445C-B0D0-833155A8B884}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AA0A4E38-5ECF-4D95-85D4-2336A4B507E7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA0A4E38-5ECF-4D95-85D4-2336A4B507E7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA0A4E38-5ECF-4D95-85D4-2336A4B507E7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA0A4E38-5ECF-4D95-85D4-2336A4B507E7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{21FB56D4-68E2-445C-B0D0-833155A8B884}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{21FB56D4-68E2-445C-B0D0-833155A8B884}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{21FB56D4-68E2-445C-B0D0-833155A8B884}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{21FB56D4-68E2-445C-B0D0-833155A8B884}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
