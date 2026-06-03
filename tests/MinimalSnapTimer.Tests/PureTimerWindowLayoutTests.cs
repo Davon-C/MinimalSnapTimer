@@ -22,6 +22,19 @@ public sealed class PureTimerWindowLayoutTests
         Assert.Contains("Path=[pure.modeBadge]", content);
     }
 
+    [Fact]
+    public void PureTimerWindow_UsesTighterDefaults_WithoutChangingContentStructure()
+    {
+        var content = File.ReadAllText(GetSourcePath("src", "MinimalSnapTimer", "Views", "PureTimerWindow.xaml"));
+
+        Assert.Contains("Width=\"292\"", content);
+        Assert.Contains("Height=\"104\"", content);
+        Assert.Contains("TextBlock Margin=\"8,4\"", content);
+        Assert.Contains("ToolbarBorder", content);
+        Assert.Contains("Margin=\"6\"", content);
+        Assert.Contains("Padding=\"4\"", content);
+    }
+
     private static string GetSourcePath(params string[] parts)
     {
         var segments = new[] { AppContext.BaseDirectory, "..", "..", "..", "..", ".." }
