@@ -17,6 +17,9 @@ public sealed class TrayService : IDisposable
     private readonly Action<string, Exception?>? _logger;
     private Icon? _trayIcon;
     private TrayContext? _context;
+    private ToolStripMenuItem? _headerMenuItem;
+    private ToolStripMenuItem? _statusMenuItem;
+    private ToolStripMenuItem? _timeMenuItem;
 
     public TrayService(
         ILocalizationService? localizer = null,
@@ -48,9 +51,12 @@ public sealed class TrayService : IDisposable
 
         EnsureTrayIcon();
         var menu = new ContextMenuStrip();
-        menu.Items.Add(new ToolStripMenuItem(_localizer["tray.header"]) { Enabled = false });
-        menu.Items.Add(new ToolStripMenuItem($"{_localizer["tray.currentStatus"]}: {_context.GetCurrentStatus()}") { Enabled = false });
-        menu.Items.Add(new ToolStripMenuItem($"{_localizer["tray.currentTime"]}: {_context.GetCurrentTimeText()}") { Enabled = false });
+        _headerMenuItem = new ToolStripMenuItem(_localizer["tray.header"]) { Enabled = false };
+        _statusMenuItem = new ToolStripMenuItem() { Enabled = false };
+        _timeMenuItem = new ToolStripMenuItem() { Enabled = false };
+        menu.Items.Add(_headerMenuItem);
+        menu.Items.Add(_statusMenuItem);
+        menu.Items.Add(_timeMenuItem);
         menu.Items.Add(new ToolStripSeparator());
         menu.Items.Add(_localizer["tray.toggleWindow"], null, (_, _) => _context.ToggleMainWindowVisibility());
         menu.Items.Add(_localizer["tray.showPureWindow"], null, (_, _) => _context.ShowPureWindow());
@@ -84,6 +90,31 @@ public sealed class TrayService : IDisposable
         menu.Items.Add(_localizer["tray.exit"], null, (_, _) => _context.Exit());
 
         _notifyIcon.ContextMenuStrip = menu;
+        UpdateStateSummary();
+        EnsureTrayIcon();
+    }
+
+    public void UpdateStateSummary()
+    {
+        if (_context is null)
+        {
+            return;
+        }
+
+        if (_headerMenuItem is not null)
+        {
+            _headerMenuItem.Text = _localizer["tray.header"];
+        }
+        if (_statusMenuItem is not null)
+        {
+            _statusMenuItem.Text = $"{_localizer["tray.currentStatus"]}: {_context.GetCurrentStatus()}";
+        }
+
+        if (_timeMenuItem is not null)
+        {
+            _timeMenuItem.Text = $"{_localizer["tray.currentTime"]}: {_context.GetCurrentTimeText()}";
+        }
+
         EnsureTrayIcon();
     }
 

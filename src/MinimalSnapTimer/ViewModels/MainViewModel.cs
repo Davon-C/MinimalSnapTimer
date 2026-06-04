@@ -639,7 +639,7 @@ public sealed class MainViewModel : ObservableObject
 
         _trayService.UpdateTooltip(status, DisplayTime);
         _trayService.SetStateIcon(Snapshot.State);
-        _trayService.RebuildMenu();
+        _trayService.UpdateStateSummary();
     }
 
     private string GetAlertStatusText()
@@ -733,6 +733,7 @@ public sealed class MainViewModel : ObservableObject
         OnPropertyChanged(nameof(AlertStatusText));
         OnPropertyChanged(nameof(CurrentTaskText));
         OnPropertyChanged(nameof(ModeToggleText));
+        _trayService.RebuildMenu();
         UpdateFromSnapshot(_timerEngine.Snapshot);
     }
 }

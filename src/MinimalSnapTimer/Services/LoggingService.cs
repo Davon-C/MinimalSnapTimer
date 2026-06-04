@@ -5,6 +5,8 @@ namespace MinimalSnapTimer.Services;
 
 public sealed class LoggingService
 {
+    private const long MaxBytesPerLogFile = 512 * 1024;
+    private const int MaxLogFilesToKeep = 30;
     private readonly string _logDirectory;
 
     public LoggingService(string? baseDirectory = null)
@@ -22,6 +24,8 @@ public sealed class LoggingService
         {
             Directory.CreateDirectory(_logDirectory);
             var path = Path.Combine(_logDirectory, $"{DateTime.Now:yyyyMMdd}.log");
+            RotateIfNeeded(path);
+            TrimStaleLogs();
             var line = $"[{DateTime.Now:HH:mm:ss}] {message}";
             if (exception is not null)
             {
@@ -29,9 +33,49 @@ public sealed class LoggingService
             }
 
             File.AppendAllText(path, line + Environment.NewLine, Encoding.UTF8);
+            TrimStaleLogs();
         }
         catch
         {
+        }
+    }
+
+    private void RotateIfNeeded(string path)
+    {
+        if (!File.Exists(path))
+        {
+            return;
+        }
+
+        var fileInfo = new FileInfo(path);
+        if (fileInfo.Length < MaxBytesPerLogFile)
+        {
+            return;
+        }
+
+        var archivePath = Path.Combine(
+            _logDirectory,
+            $"{Path.GetFileNameWithoutExtension(path)}-{DateTime.Now:HHmmss}.log");
+
+        File.Move(path, archivePath, overwrite: true);
+    }
+
+    private void TrimStaleLogs()
+    {
+        var staleLogs = Directory.GetFiles(_logDirectory, "*.log")
+            .OrderByDescending(path => path, StringComparer.OrdinalIgnoreCase)
+            .Skip(MaxLogFilesToKeep)
+            .ToArray();
+
+        foreach (var staleLog in staleLogs)
+        {
+            try
+            {
+                File.Delete(staleLog);
+            }
+            catch
+            {
+            }
         }
     }
 }

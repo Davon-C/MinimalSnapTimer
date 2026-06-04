@@ -66,4 +66,30 @@ public sealed class ThemeServiceTests
         Assert.NotNull(dictionary["DisabledForegroundBrush"]);
         Assert.NotNull(dictionary["AppPureToolbarBackgroundBrush"]);
     }
+
+    [Fact]
+    public void ApplyTheme_ReplacesExistingThemeDictionary_InsteadOfGrowingMergedDictionaries()
+    {
+        var app = Application.Current ?? new Application();
+        app.Resources.MergedDictionaries.Clear();
+        app.Resources.MergedDictionaries.Add(new ResourceDictionary
+        {
+            Source = new Uri("pack://application:,,,/MinimalSnapTimer;component/Themes/BaseTheme.xaml", UriKind.Absolute)
+        });
+        app.Resources.MergedDictionaries.Add(new ResourceDictionary
+        {
+            Source = new Uri("pack://application:,,,/MinimalSnapTimer;component/Themes/LightTheme.xaml", UriKind.Absolute)
+        });
+
+        var service = new ThemeService();
+        service.ApplyTheme(ThemePreference.Dark);
+        service.ApplyTheme(ThemePreference.Light);
+
+        var merged = app.Resources.MergedDictionaries;
+        var themeCount = merged.Count(d =>
+            string.Equals(d.Source?.OriginalString, "pack://application:,,,/MinimalSnapTimer;component/Themes/LightTheme.xaml", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(d.Source?.OriginalString, "pack://application:,,,/MinimalSnapTimer;component/Themes/DarkTheme.xaml", StringComparison.OrdinalIgnoreCase));
+
+        Assert.Equal(1, themeCount);
+    }
 }

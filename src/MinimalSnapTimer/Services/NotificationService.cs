@@ -8,7 +8,7 @@ namespace MinimalSnapTimer.Services;
 
 public sealed class NotificationService : INotificationService
 {
-    private readonly MediaPlayer _mediaPlayer = new();
+    private readonly Lazy<MediaPlayer> _mediaPlayer = new(() => new MediaPlayer());
     private readonly ILocalizationService _localizer;
 
     public NotificationService(ISystemNotificationSender? notificationSender = null, ILocalizationService? localizer = null)
@@ -59,7 +59,10 @@ public sealed class NotificationService : INotificationService
 
     public void StopLoopingSound()
     {
-        _mediaPlayer.Stop();
+        if (_mediaPlayer.IsValueCreated)
+        {
+            _mediaPlayer.Value.Stop();
+        }
     }
 
     private bool TryShowSystemNotification(string title, string message)
@@ -90,15 +93,16 @@ public sealed class NotificationService : INotificationService
     {
         if (settings.Sound == NotificationSound.Custom && !string.IsNullOrWhiteSpace(settings.CustomSoundFile) && File.Exists(settings.CustomSoundFile))
         {
-            _mediaPlayer.Open(new Uri(settings.CustomSoundFile, UriKind.Absolute));
-            _mediaPlayer.Position = TimeSpan.Zero;
-            _mediaPlayer.MediaEnded -= OnMediaEnded;
+            var player = _mediaPlayer.Value;
+            player.Open(new Uri(settings.CustomSoundFile, UriKind.Absolute));
+            player.Position = TimeSpan.Zero;
+            player.MediaEnded -= OnMediaEnded;
             if (settings.LoopSound)
             {
-                _mediaPlayer.MediaEnded += OnMediaEnded;
+                player.MediaEnded += OnMediaEnded;
             }
 
-            _mediaPlayer.Play();
+            player.Play();
             return;
         }
 
@@ -124,8 +128,13 @@ public sealed class NotificationService : INotificationService
 
     private void OnMediaEnded(object? sender, EventArgs e)
     {
-        _mediaPlayer.Position = TimeSpan.Zero;
-        _mediaPlayer.Play();
+        if (!_mediaPlayer.IsValueCreated)
+        {
+            return;
+        }
+
+        _mediaPlayer.Value.Position = TimeSpan.Zero;
+        _mediaPlayer.Value.Play();
     }
 
     private static void TryRunExternalCommand(string command)

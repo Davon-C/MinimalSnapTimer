@@ -552,9 +552,9 @@ public partial class App : System.Windows.Application
         var window = new SettingsWindow
         {
             DataContext = vm,
-            Owner = _mainWindow,
-            WindowStartupLocation = WindowStartupLocation.CenterOwner
+            WindowStartupLocation = WindowStartupLocation.CenterScreen
         };
+        TryApplySettingsOwner(window);
 
         vm.SaveRequested += async (_, _) =>
         {
@@ -591,6 +591,27 @@ public partial class App : System.Windows.Application
         };
 
         window.ShowDialog();
+    }
+
+    private void TryApplySettingsOwner(Window settingsWindow)
+    {
+        var owner = GetVisibleOwnerCandidate(preferPureWindow: false);
+        if (owner is null)
+        {
+            return;
+        }
+
+        try
+        {
+            settingsWindow.Owner = owner;
+            settingsWindow.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+        }
+        catch (InvalidOperationException ex)
+        {
+            _startupDiagnostics.Write("设置窗口 Owner 不可用，已降级为无 Owner 显示。", ex);
+            settingsWindow.Owner = null;
+            settingsWindow.WindowStartupLocation = WindowStartupLocation.CenterScreen;
+        }
     }
 
     private void HideToTray()
@@ -851,20 +872,30 @@ public partial class App : System.Windows.Application
 
     private Window? GetReminderOwnerCandidate()
     {
-        if (IsValidReminderOwner(_pureWindow))
+        return GetVisibleOwnerCandidate(preferPureWindow: true);
+    }
+
+    private Window? GetVisibleOwnerCandidate(bool preferPureWindow)
+    {
+        if (preferPureWindow && IsValidWindowOwner(_pureWindow))
         {
             return _pureWindow;
         }
 
-        if (IsValidReminderOwner(_mainWindow))
+        if (IsValidWindowOwner(_mainWindow))
         {
             return _mainWindow;
+        }
+
+        if (!preferPureWindow && IsValidWindowOwner(_pureWindow))
+        {
+            return _pureWindow;
         }
 
         return null;
     }
 
-    private static bool IsValidReminderOwner(Window? owner)
+    private static bool IsValidWindowOwner(Window? owner)
     {
         if (owner is null || !owner.IsLoaded || owner.Visibility != Visibility.Visible)
         {
